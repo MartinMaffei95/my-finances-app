@@ -3,30 +3,24 @@ import {
   adaptCurrenciesToOptions,
 } from "@/adapters/account.adapter";
 import { adaptCategoriesToOptions } from "@/adapters/category.adapter";
-import CircleButton from "@/components/Generic/BaseButtons/CircleButton";
 import ChakraControled from "@/components/Generic/Input/ChakraControled";
 import ChakraControlledSelect from "@/components/Generic/Input/ChakraControlledSelect";
 import PageView from "@/components/Generic/PageView/PageView";
 import PaperComponent from "@/components/Generic/Paper/Paper";
 import Title from "@/components/Generic/Title/Title";
 import { newAccountValidationSchema } from "@/config/schemas/account.schema";
-import { icons } from "@/config/icons.config";
 import { useApiRequest } from "@/hooks/useApiRequest";
 import {
     AccountTypes,
-  MovePostObject,
   NewAccountPostObject,
   Option,
-  OptionWithComponent,
 } from "@/interfaces";
 import AccountService from "@/services/Account.service";
 import CategoriesService from "@/services/Category.service";
-import MoveService from "@/services/Move.service";
 import {
     Button,
   FormControl,
   FormLabel,
-  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -35,7 +29,6 @@ import {
   useToast,
   UseToastOptions,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { FC, useEffect, useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
@@ -104,18 +97,18 @@ const CreateAccount: FC<Props> = ({}) => {
   const notify =(text:string,config?:UseToastOptions)=>{
     toast({title:text,...config})
   }
-  const successToast ={
-    title: 'Account created.',
-    description: "We've created your account for you.",
-    status: 'success',
-    duration: 9000,
-    isClosable: true,
-  }
+  // const successToast ={
+  //   title: 'Account created.',
+  //   description: "We've created your account for you.",
+  //   status: 'success',
+  //   duration: 9000,
+  //   isClosable: true,
+  // }
 
   const [_, setIsExpense] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<
-    OptionWithComponent | undefined
-  >(undefined);
+  // const [selectedCategory, setSelectedCategory] = useState<
+  //   OptionWithComponent | undefined
+  // >(undefined);
 
   type AccountForm = {
     name: "";
@@ -136,7 +129,7 @@ const CreateAccount: FC<Props> = ({}) => {
 
   const navigate = useNavigate();
 
-  const now = dayjs();
+  // const now = dayjs();
   const initValues: AccountForm = {
     name: "",
     description: "",

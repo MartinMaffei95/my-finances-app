@@ -1,7 +1,6 @@
 import Layout from "@/components/LayOuts/Layout";
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import Home from "./Home/Home";
-import Palette from "./Lab/Palette";
 import NewMove from "./Move/NewMove";
 import Account from "./Account/Account";
 import CreateAccount from "./Account/CreateAccount";
@@ -73,10 +72,7 @@ const router = createBrowserRouter([
         <Outlet />
     ),
     children: [
-      {
-        path: "palette",
-        element: <Palette />,
-      },
+    
     ],
   },
 ]);

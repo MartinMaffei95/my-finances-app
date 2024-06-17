@@ -1,5 +1,3 @@
-import { ListIcon } from "@chakra-ui/react"
-import { FaICursor, FaList } from "react-icons/fa"
 import { TbCategory, TbCategoryPlus } from "react-icons/tb"
 
 export type Menu ={

@@ -11,7 +11,7 @@ const MovesList: FC<Props> = ({}) => {
     const {  executeRequest } =useApiRequest((filters?: QueryObject[], page?: number) =>
         moveService.getAllMoves(filters, page)
       );
-      const [filters,setFilters] = useState<QueryObject>({
+      const [filters] = useState<QueryObject>({
         order:"DESC",
         limit:""
       })

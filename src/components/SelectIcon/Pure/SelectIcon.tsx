@@ -1,9 +1,5 @@
 import {
-  ChangeEventHandler,
-  FocusEventHandler,
   MouseEvent,
-  MouseEventHandler,
-  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -21,7 +17,7 @@ type SelectIcon = {
 };
 
 const SelectIcon = ({ setFieldValue, name, value ,actualColor,actualColor2}: SelectIcon) => {
-  const [iconNames, setIconNames] = useState(Object.keys(FaIcons));
+  const [iconNames] = useState(Object.keys(FaIcons));
   const [iconSelect, setIconSelect] = useState<string>(value);
 
   const selectIcon = (e: MouseEvent<HTMLDivElement>) => {

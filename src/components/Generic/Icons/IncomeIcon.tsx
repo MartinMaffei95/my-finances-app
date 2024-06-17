@@ -1,6 +1,5 @@
 import { StatArrow } from '@/components/Stat';
 import { FC } from 'react';
-import { FaArrowDown } from 'react-icons/fa';
 
 type Props = {}
 const IncomeIcon: FC<Props> = ({}) => {

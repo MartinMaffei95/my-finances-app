@@ -103,7 +103,7 @@ export default class AccountService {
   }
   async createAccount(postObject:NewAccountPostObject) {
     try {
-      const request = await axios({
+       await axios({
         baseURL: `${import.meta.env.VITE_BASE_URL}${endpoints["ACCOUNTS"]}`,
         method: "POST",
         data:postObject

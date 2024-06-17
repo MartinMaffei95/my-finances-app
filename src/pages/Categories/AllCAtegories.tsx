@@ -8,7 +8,7 @@ type Props = {}
 const AllCAtegories: FC<Props> = ({}) => {
     const categoyService = new CategoriesService();
     // Get Categories (for parent)
-    const {executeRequest,response,status} = useApiRequest(
+    const {executeRequest,response} = useApiRequest(
       () => categoyService.getCategories(),
       {
         adapter: (categories) => adaptCategoriesToOptions(categories?.data || []),

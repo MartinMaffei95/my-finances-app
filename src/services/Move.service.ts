@@ -62,7 +62,7 @@ export default class MoveService {
 
   async createMove(postObject:MovePostObject) {
     try {
-      const request = await axios({
+      await axios({
         baseURL: `${import.meta.env.VITE_BASE_URL}${endpoints["MOVES"]}`,
         method: "POST",
         data:postObject

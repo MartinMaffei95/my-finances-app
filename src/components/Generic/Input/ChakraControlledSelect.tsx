@@ -1,3 +1,4 @@
+import { Option, StyleConfig } from "@/interfaces";
 import {
   FormControl,
   FormErrorMessage,
@@ -5,7 +6,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { FocusEventHandler, ReactEventHandler, FC } from "react";
-import { Option, StyleConfig } from "../../interfaces";
 import { twMerge } from "tailwind-merge";
 
 type Props = {

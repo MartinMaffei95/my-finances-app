@@ -1,12 +1,10 @@
 import { adaptAccountsToOptions } from "@/adapters/account.adapter";
 import { adaptCategoriesToOptions } from "@/adapters/category.adapter";
-import CircleButton from "@/components/Generic/BaseButtons/CircleButton";
 import ChakraControled from "@/components/Generic/Input/ChakraControled";
 import ChakraControlledSelect from "@/components/Generic/Input/ChakraControlledSelect";
 import PaperComponent from "@/components/Generic/Paper/Paper";
 import Title from "@/components/Generic/Title/Title";
 import { moveValidationSchema } from "@/config/schemas/move.schema";
-import { icons } from "@/config/icons.config";
 import { siteConfig } from "@/config/site.config";
 import { useApiRequest } from "@/hooks/useApiRequest";
 import {

@@ -1,5 +1,4 @@
 import PaperComponent from '@/components/Generic/Paper/Paper';
-import Title from '@/components/Generic/Title/Title';
 import { Move } from '@/interfaces';
 import { formatDate } from '@/utils/helpers';
 import { FC } from 'react';

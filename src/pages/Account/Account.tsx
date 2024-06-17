@@ -15,7 +15,7 @@ const Account: FC<Props> = ({}) => {
     
     // Get accounts
     const accountService = new AccountService();
-    const {executeRequest,response,status} = useApiRequest((id:number) => accountService.getAccountById(id));
+    const {executeRequest,response} = useApiRequest((id:number) => accountService.getAccountById(id));
 
     const {accountId} = useParams()
 
@@ -25,7 +25,7 @@ const Account: FC<Props> = ({}) => {
       moveService.getAllMoves(filters, page)
     );
   
-    const [filters,setFilters] = useState<QueryObject>({
+    const [filters] = useState<QueryObject>({
       order:"DESC",
       limit:"15",
       account:accountId ? accountId :""

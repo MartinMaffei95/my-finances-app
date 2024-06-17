@@ -2,7 +2,6 @@ import { UseApiRequestStatus } from '@/interfaces';
 import { Button } from '@chakra-ui/react';
 import { FC } from 'react';
 import { twMerge } from 'tailwind-merge';
-import Loader from '../../Loader/Loader';
 import { CgSpinner } from 'react-icons/cg';
 
 type Props = {

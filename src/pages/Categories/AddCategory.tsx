@@ -41,7 +41,7 @@ const AddCategory: FC<Props> = ({}) => {
     }
   );
 
-  const {executeRequest,response,status} = useApiRequest(
+  const {executeRequest,status} = useApiRequest(
     (postObject:PostNewCategory) => categoyService.createCategory(postObject)
   );
 
@@ -82,7 +82,6 @@ const AddCategory: FC<Props> = ({}) => {
   };
 
   const {
-    handleSubmit,
     handleBlur,
     handleChange,
     errors,

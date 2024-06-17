@@ -34,7 +34,7 @@ const Home: FC<Props> = ({}) => {
     moveService.getAllMoves(filters, page)
   );
 
-  const [filters, setFilters] = useState<QueryObject>({
+  const [filters] = useState<QueryObject>({
     order: "DESC",
     limit: "5",
   });
