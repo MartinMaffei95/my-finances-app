@@ -135,7 +135,7 @@ const CreateAccount: FC<Props> = ({}) => {
     description: "",
     init_balance: 0,
     type_init_balance:"EXPENSE" ,
-    currency: 2,
+    currency: 0,
     type: "EFECTIVE",
     color: "#37a0ca",
     active_labels: "",
@@ -180,8 +180,8 @@ const CreateAccount: FC<Props> = ({}) => {
   useEffect(() => {
     accountRequest.executeRequest();
     categoryRequest.executeRequest();
-    currencyRequest.executeRequest();
     getAccountTypesRequest.executeRequest();
+     currencyRequest.executeRequest();
   }, []);
 
   return (
@@ -259,6 +259,7 @@ const CreateAccount: FC<Props> = ({}) => {
             error={errors?.currency}
             touched={touched?.currency}
             options={(currencyRequest?.response.data as Option[]) || []}
+            firstOption="Seleccionar"
             handleChange={handleChange}
             handleBlur={handleBlur}
             containerStyle={{ classNameStyle: "flex" }}
