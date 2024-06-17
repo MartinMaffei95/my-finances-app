@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @layer base {
+  body {
+    @apply 
+  }
+} */
+
+.content-container {
+  height: calc(100dvh - theme("height.header"));
+}
+html,
+body {
+  min-height: 100%;
+}
+body {
+  height: 100dvh;
+}
