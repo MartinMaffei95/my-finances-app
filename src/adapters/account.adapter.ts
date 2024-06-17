@@ -1,26 +1,26 @@
 import { AccountAPI, Account ,Currency, CurrencyAPI, Option } from "@/interfaces";
 
 export const adaptAccount = (account: AccountAPI): Account => {
-  const vs30d = account.vs30d || 0; // Asignar 0 si vs30d es nulo o indefinido
-  const differenceInt = account.balance - vs30d;
+  const vs30d = account?.vs30d || 0; // Asignar 0 si vs30d es nulo o indefinido
+  const differenceInt = account?.balance - vs30d;
   const differencePercentage =
     vs30d !== 0 ? (differenceInt / vs30d) * 100 : 100; // Evitar división por cero
 
   const adaptedCategory: Account = {
-    id: account.id,
-    name: account.name,
-    type: account.type,
-    normalizedType: account.type,
-    init_balance: account.init_balance,
-    balance: account.balance,
-    createdAt: account.createdAt,
-    updatedAt: account.updatedAt,
-    color: account.color,
-    deletedAt: account.deletedAt,
-    description: account.description,
-    icon: account.icon,
-    max: account.max,
-    min: account.min,
+    id: account?.id,
+    name: account?.name,
+    type: account?.type,
+    normalizedType: account?.type,
+    init_balance: account?.init_balance,
+    balance: account?.balance,
+    createdAt: account?.createdAt,
+    updatedAt: account?.updatedAt,
+    color: account?.color,
+    deletedAt: account?.deletedAt,
+    description: account?.description,
+    icon: account?.icon,
+    max: account?.max,
+    min: account?.min,
     daysAgo: {
       d30: {
         balance: vs30d,
@@ -28,10 +28,10 @@ export const adaptAccount = (account: AccountAPI): Account => {
         differencePercentage: differencePercentage,
       },
     },
-    totalIncome: account.totalIncome,
-    totalExpense: account.totalExpense,
-    totalTransferOut: account.totalTransferOut,
-    totalTransferIn: account.totalTransferIn,
+    totalIncome: account?.totalIncome,
+    totalExpense: account?.totalExpense,
+    totalTransferOut: account?.totalTransferOut,
+    totalTransferIn: account?.totalTransferIn,
   };
   return adaptedCategory;
 };
@@ -49,9 +49,9 @@ export const adaptAccounts = (accounts: AccountAPI[]): Account[] => {
 // Adapt Account from API to Option
 export const adaptAccountFromAPIToOption = (account: AccountAPI): Option => {
   const adaptedCategory: Option = {
-    value: `${account.id}`,
-    label: account.name,
-    id: account.id,
+    value: `${account?.id}`,
+    label: account?.name,
+    id: account?.id,
   };
   return adaptedCategory;
 };
@@ -91,10 +91,10 @@ export const adaptAccountsToOptions = (accounts: Account[]): Option[] => {
 // # Currency
 export const adaptCurrency = (currency: CurrencyAPI): Currency => {
   const adaptedCurrency: Currency = {
-    id: currency.id,
-    name: currency.name,
-    code: currency.code,
-    symbol: currency.symbol,
+    id: currency?.id,
+    name: currency?.name,
+    code: currency?.code,
+    symbol: currency?.symbol,
   };
   return adaptedCurrency;
 };
@@ -112,9 +112,9 @@ export const adaptCurrencies = (currencies: Currency[]): Currency[] => {
 // ## Currency to options
 export const adaptCurrencyToOption = (currency: Currency): Option => {
   const adaptedCurrency: Option<Currency> = {
-    value: `${currency.id}`,
-    label: currency.name,
-    id: currency.id,
+    value: `${currency?.id}`,
+    label: currency?.name,
+    id: currency?.id,
     extraData: currency,
   };
   return adaptedCurrency;

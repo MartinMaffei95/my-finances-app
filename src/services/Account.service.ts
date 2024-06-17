@@ -65,7 +65,7 @@ export default class AccountService {
       });
       // Adapting response
       console.log(request.data);
-      const adaptedData = adaptCurrencies(request.data.data);
+      const adaptedData = adaptCurrencies(request?.data?.data);
       const responseData: PaginatedData<Currency[]> = {
         data: adaptedData,
         pagination: request.data.paginate,
@@ -90,9 +90,9 @@ export default class AccountService {
         method: "GET",
       });
       // Adapting response
-      console.log("getAccountsTypes",request.data)
+      console.log("getAccountsTypes",request?.data)
       
-      const adaptedData = (request.data.data);
+      const adaptedData = (request?.data?.data);
       const responseData: {data:AccountTypes[]} = {
         data: adaptedData,
       };
