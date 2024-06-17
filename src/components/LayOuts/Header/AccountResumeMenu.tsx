@@ -5,7 +5,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 
 type Props = {
-  account: Account;
+  account?: Account;
   close:()=>void
 };
 const AccountResumeMenu: FC<Props> = ({ account,close }) => {
@@ -16,12 +16,12 @@ const AccountResumeMenu: FC<Props> = ({ account,close }) => {
         <div className="flex w-full  justify-between">
           <div
             className="h-10 w-10 flex rounded-full aspect-square"
-            style={{ background: account.color || "rgba(240,240,240,1)" }}
+            style={{ background: account?.color || "rgba(240,240,240,1)" }}
           ></div>
           <div  className="self-start flex flex-col items-end ">
-            <Link onClick={close} to={`/account/${account.id}`} className="font-bold ">{account.name}</Link>
+            <Link onClick={close} to={`/account/${account?.id}`} className="font-bold ">{account?.name}</Link>
             <ScaleFade initialScale={0.9} in={!isOpen}>
-              <p className="font-semibold ">${account.balance}</p>
+              <p className="font-semibold ">${account?.balance}</p>
             </ScaleFade>
           </div>
         </div>
@@ -41,7 +41,7 @@ const AccountResumeMenu: FC<Props> = ({ account,close }) => {
           <table className="">
             <tr>
               <td>Balance inicial</td>
-              <td align="right">${account.balance}</td>
+              <td align="right">${account?.balance}</td>
             </tr>
             <tr>
               <td>Balance hace 30 dias</td>
@@ -49,21 +49,21 @@ const AccountResumeMenu: FC<Props> = ({ account,close }) => {
             </tr>
             <tr>
               <td>Ingrsos</td>
-              <td align="right">${account.totalIncome}</td>
+              <td align="right">${account?.totalIncome}</td>
             </tr>
             <tr>
               <td>Gastos</td>
-              <td align="right">${account.totalExpense}</td>
+              <td align="right">${account?.totalExpense}</td>
             </tr>
             <tr>
               <td>Trasnferencias</td>
               <td align="right">
-                ${account.totalTransferOut + account.totalTransferIn}
+                ${account?.totalTransferOut && account?.totalTransferIn ? account?.totalTransferOut + account?.totalTransferIn : 0}
               </td>
             </tr>
             <tr>
               <td>Total</td>
-              <td align="right">${account.balance}</td>
+              <td align="right">${account?.balance}</td>
             </tr>
           </table>
         </div>

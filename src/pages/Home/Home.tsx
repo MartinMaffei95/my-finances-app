@@ -62,14 +62,14 @@ const Home: FC<Props> = ({}) => {
                <ExpenseIcon/>
                  Gastos
               </p>
-              <p className=" text-center text-lg font-semibold">${response.data?.data[0].totalExpense}</p>
+              <p className=" text-center text-lg font-semibold">${response.data?.data[0]?.totalExpense}</p>
             </div>
             <div>
               <p className="flex gap-1 items-center">
                 <IncomeIcon/>
                  Ingresos
               </p>
-              <p className=" text-center text-lg font-semibold">${response.data?.data[0].totalIncome}</p>
+              <p className=" text-center text-lg font-semibold">${response.data?.data[0]?.totalIncome}</p>
             </div>
           </div>
         </LoadingWrapper>
