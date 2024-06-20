@@ -4,7 +4,7 @@ import ChakraControled from "@/components/Generic/Input/ChakraControled";
 import PageView from "@/components/Generic/PageView/PageView";
 import PaperComponent from "@/components/Generic/Paper/Paper";
 import Title from "@/components/Generic/Title/Title";
-import SelectIcon from "@/components/SelectIcon/Pure/SelectIcon";
+import SelectIcon, { IconHandle } from "@/components/SelectIcon/Pure/SelectIcon";
 import { categoryValidationSchema } from "@/config/schemas/category.schema";
 import { useApiRequest } from "@/hooks/useApiRequest";
 import { OptionWithComponent, PostNewCategory } from "@/interfaces";
@@ -23,14 +23,18 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Skeleton,
   Switch,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { twMerge } from "tailwind-merge";
+
+
 type Props = {};
+
 const AddCategory: FC<Props> = ({}) => {
   const categoyService = new CategoriesService();
   // Get Categories (for parent)
@@ -64,8 +68,9 @@ const AddCategory: FC<Props> = ({}) => {
     color2: "#000",
     icon: "",
     parent: undefined,
-    parent_active:true
+    parent_active:false
   };
+  const childRef = useRef<IconHandle>(null);
 
   const onSubmit = async () => {
   if(!values.name)return
@@ -77,7 +82,8 @@ const AddCategory: FC<Props> = ({}) => {
         parent:values.parent_active ? values.parent :undefined
     }
     await executeRequest(postObject)
-
+    await getCategoryRequest.executeRequest();
+    childRef?.current?.resetSearch()
     resetForm()
   };
 
@@ -95,12 +101,13 @@ const AddCategory: FC<Props> = ({}) => {
     validationSchema: categoryValidationSchema,
   });
 
+
+
   return (
     <>
         <PageView>
       <Title extraCss="text-primary-50">Nueva categoria</Title>
       <PaperComponent>
-
       <ChakraControled
               label="Nombre: "
               name="name"
@@ -172,8 +179,16 @@ const AddCategory: FC<Props> = ({}) => {
               <ModalCloseButton />
               <ModalBody className=" ">
                 <ul className="!h-[40vh] overflow-auto">
-                  {(
-                    getCategoryRequest.response.data as OptionWithComponent[]
+
+                  
+                  {
+                  getCategoryRequest.status === "LOADING" ?
+                  ([1,2,3,4,5,6,7,8,9,10]).map((s) => (
+                    <Skeleton key={s} className="!rounded-md !my-2" height={"35px"} />
+                  ))
+                  :
+                  (
+                    getCategoryRequest?.response?.data as OptionWithComponent[]
                   )?.map((c) => (
                     <li
                       key={c.id}
@@ -188,7 +203,8 @@ const AddCategory: FC<Props> = ({}) => {
                     >
                       {c.label}
                     </li>
-                  ))}
+                  ))
+                  }
                 </ul>
               </ModalBody>
               <ModalFooter>
@@ -216,6 +232,7 @@ const AddCategory: FC<Props> = ({}) => {
           setFieldValue={setFieldValue}
           name={"icon"}
           value={values.icon || ""}
+          ref={childRef}
         />
 
       
