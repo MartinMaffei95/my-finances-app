@@ -1,34 +1,26 @@
-import { adaptCategoriesToOptions } from "@/adapters/category.adapter";
 import CircularButton from "@/components/Buttons/CircularButton/CircularButton";
 import ChakraControled from "@/components/Generic/Input/ChakraControled";
 import PageView from "@/components/Generic/PageView/PageView";
 import PaperComponent from "@/components/Generic/Paper/Paper";
 import Title from "@/components/Generic/Title/Title";
+import GetCategories from "@/components/Modal/GetCategories/GetCategories";
 import SelectIcon, { IconHandle } from "@/components/SelectIcon/Pure/SelectIcon";
 import { categoryValidationSchema } from "@/config/schemas/category.schema";
 import { useApiRequest } from "@/hooks/useApiRequest";
-import { OptionWithComponent, PostNewCategory } from "@/interfaces";
+import { PostNewCategory } from "@/interfaces";
 import CategoriesService from "@/services/Category.service";
 import {
   Button,
   FormControl,
   FormLabel,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Skeleton,
   Switch,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC,  useRef} from "react";
 import { HexColorPicker } from "react-colorful";
 import { twMerge } from "tailwind-merge";
 
@@ -37,26 +29,11 @@ type Props = {};
 
 const AddCategory: FC<Props> = ({}) => {
   const categoyService = new CategoriesService();
-  // Get Categories (for parent)
-  const getCategoryRequest = useApiRequest(
-    () => categoyService.getCategories(),
-    {
-      adapter: (categories) => adaptCategoriesToOptions(categories?.data || []),
-    }
-  );
-
   const {executeRequest,status} = useApiRequest(
     (postObject:PostNewCategory) => categoyService.createCategory(postObject)
   );
 
-  useEffect(() => {
-    getCategoryRequest.executeRequest();
-  }, []);
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedCategory, setSelectedCategory] = useState<
-    OptionWithComponent | undefined
-  >(undefined);
+ 
 
   interface CategoryForm extends PostNewCategory {
     parent_active:boolean
@@ -82,7 +59,6 @@ const AddCategory: FC<Props> = ({}) => {
         parent:values.parent_active ? values.parent :undefined
     }
     await executeRequest(postObject)
-    await getCategoryRequest.executeRequest();
     childRef?.current?.resetSearch()
     resetForm()
   };
@@ -161,60 +137,11 @@ const AddCategory: FC<Props> = ({}) => {
       )}
         >
           <FormControl fontWeight={"semibold"}>Categoria padre:</FormControl>
-          <Button 
-                isDisabled={!values.parent_active}
-                variant={"outline"} onClick={onOpen}
-            >
-            {selectedCategory ? selectedCategory.label : "Seleccionar"}
-          </Button>
-          <Modal
-            isCentered
-            onClose={onClose}
-            isOpen={isOpen}
-            motionPreset="slideInBottom"
-          >
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Categorias</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody className=" ">
-                <ul className="!h-[40vh] overflow-auto">
-
-                  
-                  {
-                  getCategoryRequest.status === "LOADING" ?
-                  ([1,2,3,4,5,6,7,8,9,10]).map((s) => (
-                    <Skeleton key={s} className="!rounded-md !my-2" height={"35px"} />
-                  ))
-                  :
-                  (
-                    getCategoryRequest?.response?.data as OptionWithComponent[]
-                  )?.map((c) => (
-                    <li
-                      key={c.id}
-                      onClick={() => {
-                        onClose();
-                        setSelectedCategory(c);
-                        setFieldValue("parent", c.value);
-                      }}
-                      className="bg-white  shadow-md rounded my-2 p-2
-                        hover:bg-neutral-100 cursor-pointer duration-100
-                        "
-                    >
-                      {c.label}
-                    </li>
-                  ))
-                  }
-                </ul>
-              </ModalBody>
-              <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Cerrar
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-
+          <GetCategories
+              selectAction={(c) => {
+                setFieldValue("parent", c.value)
+              }}
+            />
           <Switch
                 isChecked={values.parent_active}
                 onChange={(value) => {

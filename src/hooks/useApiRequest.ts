@@ -6,23 +6,29 @@ export interface ApiResponse<ResponseData = any> {
   error: any | null;
 }
 
-export function useApiRequest<ResponseData, ApiFunctionParams extends any[],AdaptedResponseData = ResponseData>(
+export function useApiRequest<
+  ResponseData,
+  ApiFunctionParams extends any[],
+  AdaptedResponseData = ResponseData
+>(
   apiFunction: (...data: ApiFunctionParams) => Promise<ResponseData>,
   extraConfig?: {
-    succesAction?: (result?: Awaited<ResponseData>) => void
-    errorAction?: (error?:any) => void
-    adapter?: (response: Awaited<ResponseData>) => AdaptedResponseData
-}
+    succesAction?: (result: ResponseData | AdaptedResponseData) => void;
+    errorAction?: (error: any) => void;
+    adapter?: (response: ResponseData) => AdaptedResponseData;
+  }
 ) {
   const [status, setStatus] = useState<UseApiRequestStatus>("NONE");
   const [response, setResponse] = useState<
-  ApiResponse<ResponseData | AdaptedResponseData>
->({
-  data: null,
-  error: null,
-});
+    ApiResponse<ResponseData | AdaptedResponseData>
+  >({
+    data: null,
+    error: null,
+  });
 
-  const executeRequest = async (...params: ApiFunctionParams) => {
+  const executeRequest = async (
+    ...params: ApiFunctionParams
+  ): Promise<ResponseData | AdaptedResponseData|undefined> => {
     setStatus("LOADING");
     setResponse(() => ({
       data: null,
@@ -31,25 +37,27 @@ export function useApiRequest<ResponseData, ApiFunctionParams extends any[],Adap
 
     try {
       const result = await apiFunction(...params);
-      setResponse((state) => ({ ...state, data: result }));
-      setStatus("SUCCESS");
-        if (extraConfig?.succesAction) {
-          extraConfig?.succesAction(result)
-        }
-        if (extraConfig?.adapter) {
-            const adaptedResult = await extraConfig?.adapter(result)
-            response.data = adaptedResult
-            setResponse((state) => ({ ...state, data: adaptedResult }));
+      let finalResult: ResponseData | AdaptedResponseData = result;
 
-            return adaptedResult
-        }
-      return result;
+      if (extraConfig?.adapter) {
+        finalResult = extraConfig.adapter(result);
+      }
+      
+      setResponse((state) => ({ ...state, data: finalResult }));
+      setStatus("SUCCESS");
+      
+      if (extraConfig?.succesAction) {
+        extraConfig.succesAction(finalResult);
+      }
+      
+      return finalResult;
     } catch (error) {
       setResponse((state) => ({ ...state, error: error }));
       setStatus("ERROR");
-        if (extraConfig?.errorAction) {
-          extraConfig?.errorAction(error)
-        }
+      if (extraConfig?.errorAction) {
+        extraConfig.errorAction(error);
+      }
+      throw error;
     }
   };
 

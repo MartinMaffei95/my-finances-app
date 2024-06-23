@@ -1,5 +1,6 @@
-import { adaptAccountsToOptions } from "@/adapters/account.adapter";
-import { adaptCategoriesToOptions } from "@/adapters/category.adapter";
+import {
+  adaptAccountToOption,
+} from "@/adapters/account.adapter";
 import ChakraControled from "@/components/Generic/Input/ChakraControled";
 import ChakraControlledSelect from "@/components/Generic/Input/ChakraControlledSelect";
 import PaperComponent from "@/components/Generic/Paper/Paper";
@@ -11,29 +12,20 @@ import {
   MovePostObject,
   MoveTypes,
   Option,
-  OptionWithComponent,
 } from "@/interfaces";
 import AccountService from "@/services/Account.service";
-import CategoriesService from "@/services/Category.service";
 import MoveService from "@/services/Move.service";
 import {
-  Button,
   FormControl,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Switch,
-  useDisclosure,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CircularButton from "@/components/Buttons/CircularButton/CircularButton";
+import { adaptCollectionElements } from "@/adapters/generic.adapter";
+import GetCategories from "@/components/Modal/GetCategories/GetCategories";
 
 type Props = {};
 const NewMove: FC<Props> = ({}) => {
@@ -43,13 +35,10 @@ const NewMove: FC<Props> = ({}) => {
   // Get accounts options
   const accountService = new AccountService();
   const accountRequest = useApiRequest(() => accountService.getAccounts(), {
-    adapter: (accounts) => adaptAccountsToOptions(accounts?.data || []),
+    adapter: (accounts) =>
+      adaptCollectionElements(accounts?.data || [], adaptAccountToOption),
   });
-  // Get categories options
-  const categoyService = new CategoriesService();
-  const categoryRequest = useApiRequest(() => categoyService.getCategories(), {
-    adapter: (categories) => adaptCategoriesToOptions(categories?.data || []),
-  });
+
 
   const [moveType, setMoveType] = useState<MoveTypes>("EXPENSE");
 
@@ -61,10 +50,6 @@ const NewMove: FC<Props> = ({}) => {
   const now = dayjs();
   const navigate = useNavigate();
   const [_, setIsExpense] = useState(false);
-
-  const [selectedCategory, setSelectedCategory] = useState<
-    OptionWithComponent | undefined
-  >(undefined);
 
   type MoveForm = {
     type: MoveTypes;
@@ -123,7 +108,6 @@ const NewMove: FC<Props> = ({}) => {
 
   const initialFetch = async () => {
     const accountRes = (await accountRequest.executeRequest()) as Option[];
-    await categoryRequest.executeRequest();
     if (accountRes) {
       setFieldValue("account", accountRes[0].id);
     }
@@ -131,7 +115,6 @@ const NewMove: FC<Props> = ({}) => {
 
   useEffect(() => {
     initialFetch();
-    // Get the "action" query Param
     const action = searchParams.get("action");
     if (action) {
       switch (action) {
@@ -163,7 +146,6 @@ const NewMove: FC<Props> = ({}) => {
     }
   }, [values.account]);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Title extraCss="text-primary-50">Nuevo movimiento</Title>
@@ -235,9 +217,8 @@ const NewMove: FC<Props> = ({}) => {
               handleBlur={handleBlur}
               handleChange={handleChange}
               type="number"
-              variant="flushed" 
+              variant="flushed"
               className="text-right !pr-2"
-
             />
           </div>
           <div className="flex gap-2 rounded-md p-1 ">
@@ -267,62 +248,12 @@ const NewMove: FC<Props> = ({}) => {
           </div>
           <div className="flex ">
             <FormControl fontWeight={"semibold"}>Categoria:</FormControl>
-            <Button variant={"outline"} onClick={onOpen}>
-              {selectedCategory ? selectedCategory.label : "Seleccionar"}
-            </Button>
-            <Modal
-              isCentered
-              onClose={onClose}
-              isOpen={isOpen}
-              motionPreset="slideInBottom"
-            >
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Categorias</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody className=" ">
-                  <ul className="!h-[40vh] overflow-auto">
-                    {(
-                      categoryRequest.response.data as OptionWithComponent[]
-                    )?.map((c) => (
-                      <li
-                        key={c.id}
-                        onClick={() => {
-                          onClose();
-                          setSelectedCategory(c);
-                          setFieldValue("category", c.value);
-                        }}
-                        className="bg-white  shadow-md rounded my-2 p-2
-                        hover:bg-neutral-100 cursor-pointer duration-100
-                        "
-                      >
-                        {c.label}
-                      </li>
-                    ))}
-                  </ul>
-                </ModalBody>
-                <ModalFooter>
-                  <Button colorScheme="blue" mr={3} onClick={onClose}>
-                    Cerrar
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+            <GetCategories
+              selectAction={(c) => {
+                setFieldValue("category", c.value);
+              }}
+            />
           </div>
-
-          {/* <CircleButton
-                style={{
-                buttonClassName: "!absolute !bottom-2 right-0 !h-min ",
-                circleClassName: "bg-primary-400 text-white",
-                loadingCircleClassName:"bg-primary-200"
-                }}
-                icon={icons()["check"]}
-                type="submit"
-                onClick={()=>onSubmit()}
-                status={status}
-                isDisabled={status ==="LOADING" ? true :false}
-            /> */}
-
           <CircularButton action={onSubmit} status={status} />
         </form>
       </PaperComponent>

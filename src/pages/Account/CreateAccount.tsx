@@ -2,7 +2,6 @@ import {
   adaptAccountsToOptions,
   adaptCurrenciesToOptions,
 } from "@/adapters/account.adapter";
-import { adaptCategoriesToOptions } from "@/adapters/category.adapter";
 import ChakraControled from "@/components/Generic/Input/ChakraControled";
 import ChakraControlledSelect from "@/components/Generic/Input/ChakraControlledSelect";
 import PageView from "@/components/Generic/PageView/PageView";
@@ -16,7 +15,6 @@ import {
   Option,
 } from "@/interfaces";
 import AccountService from "@/services/Account.service";
-import CategoriesService from "@/services/Category.service";
 import {
     Button,
   FormControl,
@@ -45,12 +43,6 @@ const CreateAccount: FC<Props> = ({}) => {
   const accountRequest = useApiRequest(() => accountService.getAccounts(), {
     adapter: (accounts) => adaptAccountsToOptions(accounts?.data || []),
   });
-  // Get categories options
-  const categoyService = new CategoriesService();
-  const categoryRequest = useApiRequest(() => categoyService.getCategories(), {
-    adapter: (categories) => adaptCategoriesToOptions(categories?.data || []),
-  });
-
   // Get Currencies
   const currencyRequest = useApiRequest(() => accountService.getCurrencies(), {
     adapter: (currencies) => adaptCurrenciesToOptions(currencies?.data || []),
@@ -97,18 +89,8 @@ const CreateAccount: FC<Props> = ({}) => {
   const notify =(text:string,config?:UseToastOptions)=>{
     toast({title:text,...config})
   }
-  // const successToast ={
-  //   title: 'Account created.',
-  //   description: "We've created your account for you.",
-  //   status: 'success',
-  //   duration: 9000,
-  //   isClosable: true,
-  // }
-
   const [_, setIsExpense] = useState(false);
-  // const [selectedCategory, setSelectedCategory] = useState<
-  //   OptionWithComponent | undefined
-  // >(undefined);
+
 
   type AccountForm = {
     name: "";
@@ -179,7 +161,7 @@ const CreateAccount: FC<Props> = ({}) => {
 
   useEffect(() => {
     accountRequest.executeRequest();
-    categoryRequest.executeRequest();
+    //categoryRequest.executeRequest();
     getAccountTypesRequest.executeRequest();
      currencyRequest.executeRequest();
   }, []);

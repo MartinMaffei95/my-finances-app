@@ -50,7 +50,7 @@ export const adaptCategoriesFromAPIToOptions =(categories:CategoryAPI[]):Option[
     return  adaptedCategories
 }
 // Adapt Category who is already adapted for api to Option
-export const adaptCategoryToOption  =(category:Category,isSubCategory:boolean = false):OptionWithComponent=>{
+export const adaptCategoryToOption  =(category:Category,isSubCategory:boolean = false):OptionWithComponent<Category>=>{
     const label =  <div className={twMerge('flex items-center rounded-md gap-1',isSubCategory ? "ml-2" : "font-medium")}> {category.name} <CustomIcon iconName={category?.icon || ""}/></div>
     const adaptedCategory:OptionWithComponent<Category> ={
         value: `${category.id}`,

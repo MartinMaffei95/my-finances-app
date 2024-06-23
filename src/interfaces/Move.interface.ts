@@ -33,6 +33,7 @@ export interface MoveAPI {
   value: number;
   comment: string;
   createdAt: string;
+  date: string;
   updatedAt: string;
   deletedAt?: any;
   category: CategoryAPI;

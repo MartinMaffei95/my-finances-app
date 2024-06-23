@@ -8,7 +8,7 @@ export const adaptMove =(move:MoveAPI):Move=>{
         parsedType: parseMoveType(move?.type) || "",
         value: move.value,
         comment: move.comment,
-        createdAt: move.createdAt,
+        createdAt: move.date, 
         updatedAt: move.updatedAt,
         category:adaptCategory(move.category)
     }
